@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-menu="rofi -dmenu -no-show-match -monitor 0"
+menu="rofi -dmenu -no-show-match -monitor 0 -width 30"
 
 stack=$(echo -e "$2" | tac)
 
@@ -10,18 +10,20 @@ stack=$(echo -e "$stack\n$1\nf" | dc)
 
 #echo -e "stack: $stack;"
 
-[[ -n "$stack" ]] || stack="0"
+[[ -n "$stack" ]] && prompt="$stack" || prompt="empty"
 
-action=$(echo -e "$stack" | $menu -p "= ")
+action=$(echo -e "$prompt" | $menu -p "= ")
 
 #echo "action: $action;"
 
 case $action in
-	"y") (echo -e "$(echo -e "$stack" | tac)\np" | dc) | wl-copy ; $0 "" "$stack" ;; # yank top to clipboard
-	"p") $0 "" "$stack" ;; 
-	"q") exit ;;
-	"" ) exit ;;
-	*  ) $0 "$action" "$stack" ;;
+	"y"    ) (echo -e "$(echo -e "$stack" | tac)\np" | dc) | wl-copy ; $0 "" "$stack" ;; # yank top to clipboard
+	"p"    ) $0 "" "$stack" ;; 	
+	"P"    ) $0 "s" "$stack" ;; 	
+	"q"    ) exit ;;
+	""     ) exit ;;
+	"empty") $0 "" "" ;;
+	*      ) $0 "$action" "$stack" ;;
 esac
 
 
