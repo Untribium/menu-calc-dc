@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-menu="rofi -dmenu -no-show-match"
+menu="rofi -dmenu -no-show-match -monitor 0"
 
 stack=$(echo -e "$2" | tac)
 
@@ -10,9 +10,9 @@ stack=$(echo -e "$stack\n$1\nf" | dc)
 
 #echo -e "stack: $stack;"
 
-[[ -n "$stack" ]] && stack="\n$stack"
+[[ -n "$stack" ]] || stack="0"
 
-action=$(echo -e "q$stack" | $menu -p "= ")
+action=$(echo -e "$stack" | $menu -p "= ")
 
 #echo "action: $action;"
 
